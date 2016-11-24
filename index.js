@@ -25,7 +25,7 @@ function sendNewTorrents() {
       .latest()
       .then(result => {
          result = _.filter(result, i => !(lastUpdate && i.date < lastUpdate))
-         result = applyFilters(result)
+         //result = applyFilters(result)
          result = _.sortBy(result, ['date'])
 
          Promise
