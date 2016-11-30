@@ -59,9 +59,9 @@ function applyFilters(infoArray) {
 
 
 gateway.onRequestAddTorrent(function (msg) {
-   tracker.decodeTorrent(msg.data)
+   tracker.decodeTorrent(msg)
       .then((torrent) => {
-         console.log("Added: " + msg.data)
+         console.log("Added: " + msg)
          return seedbox.addTorrent(torrent)
       })
    }
