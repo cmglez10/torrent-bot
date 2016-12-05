@@ -25,7 +25,7 @@ function sendNewTorrents() {
       .latest()
       .then(result => {
          result = _.filter(result, i => !(lastUpdate && i.date < lastUpdate))
-         //result = applyFilters(result)
+         result = applyFilters(result)
          result = _.sortBy(result, ['date'])
 
          Promise
@@ -42,21 +42,27 @@ function sendNewTorrents() {
 
 
 function applyFilters(infoArray) {
-   return _.filter(infoArray, function (info) {
-      var filtersOfType = filters[info.type]
+    return _.filter(infoArray, function (info) {
+        var title = cleanTermToSearch(info.titleAll)
+        var res = false
+        config.tracker.filters.forEach((filter) => {
+            var partialres = true
+            filter.forEach((term) => {
+                var clenanedterm = cleanTermToSearch(term)
+                if (!_.includes(title, clenanedterm)) partialres = false
+            })
 
-      if(!filtersOfType) {
-         filtersOfType = filters.default
-      }
+            if (partialres) res = true
 
-      if(!filtersOfType) {
-         return true
-      }
+        })
 
-      return filterUtils.and(info, filtersOfType.filter || [])
-   })
+        return res
+    })
 }
 
+function cleanTermToSearch(term){
+    return term.toLowerCase()
+}
 
 gateway.onRequestAddTorrent(function (msg) {
    tracker.decodeTorrent(msg)
