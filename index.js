@@ -67,7 +67,7 @@ function cleanTermToSearch(term){
 gateway.onRequestAddTorrent(function (msg) {
    tracker.decodeTorrent(msg)
       .then((torrent) => {
-         console.log("Added: " + msg)
+         // console.log("Added: " + msg)
          return seedbox.addTorrent(torrent)
       })
    }
