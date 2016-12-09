@@ -20,7 +20,7 @@ setInterval(sendNewTorrents, config.refreshInterval)
 
 var lastUpdate;
 function sendNewTorrents() {
-   console.log("BUSCANDO NUEVOS TORRENTS")
+   console.log(new Date().toISOString()+" - BUSCANDO NUEVOS TORRENTS")
    tracker
       .latest()
       .then(result => {
