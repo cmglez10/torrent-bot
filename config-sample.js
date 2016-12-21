@@ -34,7 +34,12 @@ module.exports =
       rpc: "http://<transmission host>:<transmission port>/transmission/rpc"
    },
    tracker: {
-      type: 'elitetorrent'
+      type: 'elitetorrent',
+      url: "<tracker rss url>",
+      filters: [
+         ["<term to search>", "<other term to search>", "<etc>"],
+         ["<term to search 2>", "<other term to search 2>", "<etc>"]
+      ]
    },
    gateway: {
       type: 'telegram',
