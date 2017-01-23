@@ -10,8 +10,8 @@ module.exports =
 {
    database: {
       uri: '<URL>:<PORT>/<DATABASE>',
-      user: 'cmglez10',
-      password: 'karate24'
+      user: '<USER>',
+      password: '<PASSWORD>'
    },
    refreshInterval: 60 * 60 * 1000, // En milisegundos
    seedbox: {
