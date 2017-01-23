@@ -8,25 +8,12 @@ var qualities = require('./lib/qualities')
 
 module.exports =
 {
+   database: {
+      uri: '<URL>:<PORT>/<DATABASE>',
+      user: 'cmglez10',
+      password: 'karate24'
+   },
    refreshInterval: 60 * 60 * 1000, // En milisegundos
-   filters: [ // Aplica solo los del tipo correspondiente
-      {
-         type: types.MOVIE,
-         filter: [ // AND filter
-            generateFilter('quality', [qualities.OTHER, qualities.HDRip, qualities.microHD])
-         ]
-      },
-      {
-         type: types.SHOW,
-         filter: [
-            generateFilter('episode', [1])
-         ]
-      },
-      {
-         type: 'default',
-         filter: []
-      }
-   ],
    seedbox: {
       type: 'transmission',
       user: "<transmission user>",
