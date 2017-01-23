@@ -22,11 +22,7 @@ module.exports =
    },
    tracker: {
       type: 'elitetorrent',
-      url: "<tracker rss url>",
-      filters: [
-         ["<term to search>", "<other term to search>", "<etc>"],
-         ["<term to search 2>", "<other term to search 2>", "<etc>"]
-      ]
+      url: "<tracker rss url>"
    },
    gateway: {
       type: 'telegram',
