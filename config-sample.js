@@ -21,7 +21,7 @@ module.exports =
       rpc: "http://<transmission host>:<transmission port>/transmission/rpc"
    },
    tracker: {
-      type: 'elitetorrent',
+      type: 'hdcity',
       url: "<tracker rss url>"
    },
    gateway: {

@@ -32,6 +32,7 @@ var filterSchema = mongoose.Schema({
    name: String,
    type: String,
    tracker: String,
+   path: String,
    terms: [String]
 });
 
@@ -51,11 +52,15 @@ function sendNewTorrents() {
    tracker
       .latest()
       .then(result => {
+         //filtro para quedarme sólo con los posteriores a la fecha de ultima actualización
          result = _.filter(result, i => !(lastUpdate && i.date < lastUpdate))
 
+         //Buscamos los filtros de hdcity para pasarlos a la función que aplica filtros
          Filter.find({tracker: "hdcity"}, function (err, filters){
-            console.log(JSON.stringify(filters))
+            // console.log(JSON.stringify(filters))
             result = applyFilters(result, filters)
+            // console.log("resultado filtrado:")
+            // console.log(result)
             result = _.sortBy(result, ['date'])
 
             Promise
@@ -71,7 +76,9 @@ function sendNewTorrents() {
       })
 }
 
-
+/*
+   Devuelve sólo aquellos registros de infoArray que pasan algún filtro de filters
+ */
 function applyFilters(infoArray, filters) {
     return _.filter(infoArray, function (info) {
         var title = cleanTermToSearch(info.titleAll)
@@ -86,7 +93,10 @@ function applyFilters(infoArray, filters) {
                 var clenanedterm = cleanTermToSearch(term)
                 if (!_.includes(title, clenanedterm)) partialres = false
             })
-            if (partialres) res = true
+            if (partialres){
+               res = true
+               info.path = filter.path;
+            }
         })
         return res
     })
@@ -96,11 +106,11 @@ function cleanTermToSearch(term){
     return term.toLowerCase()
 }
 
-gateway.onRequestAddTorrent(function (msg) {
+gateway.onRequestAddTorrent(function (msg, path) {
    tracker.decodeTorrent(msg)
       .then((torrent) => {
          // console.log("Added: " + msg)
-         return seedbox.addTorrent(torrent)
+         return seedbox.addTorrent(torrent, path)
       })
    }
 )
