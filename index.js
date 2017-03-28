@@ -33,6 +33,7 @@ var filterSchema = mongoose.Schema({
    type: String,
    tracker: String,
    path: String,
+   image: String,
    terms: [String]
 });
 
@@ -95,6 +96,7 @@ function applyFilters(infoArray, filters) {
             })
             if (partialres){
                res = true
+               info.path = filter.path;
                info.path = filter.path;
             }
         })
