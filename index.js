@@ -97,7 +97,7 @@ function applyFilters(infoArray, filters) {
             if (partialres){
                res = true
                info.path = filter.path;
-               info.path = filter.path;
+               info.image = filter.image;
             }
         })
         return res
