@@ -105,8 +105,11 @@ function applyFilters(infoArray, filters) {
 }
 
 function cleanTermToSearch(term){
-    return term.toLowerCase()
+   var unescapeterm = unescape(term)
+    return unescapeterm.toLowerCase()
 }
+
+
 
 gateway.onRequestAddTorrent(function (msg, path) {
    tracker.decodeTorrent(msg)
