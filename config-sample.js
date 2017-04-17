@@ -30,8 +30,8 @@ module.exports =
       userId: 0 // <telegram userId>
    },
    info: {
-      type: 'trakt-tv',
-      clientId: '<trakt.tv API clientId>',
-      clientSecret: '<trakt.tv API clientSecret>'
+      type: 'tviso',
+      idapi: '<tviso idAPI>',
+      secret: '<tviso secret>'
    }
 }

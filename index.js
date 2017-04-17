@@ -96,6 +96,7 @@ function applyFilters(infoArray, filters) {
             })
             if (partialres){
                res = true
+               info.titleSearch = filter.name;
                info.path = filter.path;
                info.image = filter.image;
             }
