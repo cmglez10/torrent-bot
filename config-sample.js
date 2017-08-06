@@ -29,9 +29,13 @@ module.exports =
       token: '<telegram token>',
       userId: 0 // <telegram userId>
    },
-   info: {
+    // TViso API is not working
+   /*info: {
       type: 'tviso',
       idapi: '<tviso idAPI>',
       secret: '<tviso secret>'
+   }*/
+   info: {
+      type: 'trakt-tv'
    }
 }
