@@ -36,6 +36,8 @@ module.exports =
       secret: '<tviso secret>'
    }*/
    info: {
-      type: 'trakt-tv'
+      type: 'trakt-tv',
+      clientId: '5d019829b09612b23b4dbe5ab5026f4d81f37638363637541d7fd3bc64b750e0',
+      clientSecret: '2d938ed974d1fe32c9b80fe6a1b34969062c7d8891a3d3f6f3be658b1eb190cd'
    }
 }
