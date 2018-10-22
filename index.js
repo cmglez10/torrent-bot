@@ -2,6 +2,10 @@ var config = require('./config')
 var Promise = require('bluebird')
 global.Promise = Promise
 
+Promise.config({
+    cancellation: true
+  });
+  
 var gateway = require('./lib/gateways/' + config.gateway.type)(config.gateway)
 var seedbox = require('./lib/seedboxs/' + config.seedbox.type)(config.seedbox, gateway)
 var tracker = require('./lib/trackers/' + config.tracker.type)(config.tracker, gateway)
@@ -20,12 +24,13 @@ global.types = types
 var mongoose = require('mongoose');
 global.mongoose = mongoose;
 
-mongoose.connect('mongodb://'+config.database.user+':'+config.database.password+'@'+config.database.uri);
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-   console.log("Connection established with MongoDB");
-});
+mongoose.connect('mongodb://'+config.database.user+':'+config.database.password+'@'+config.database.uri, { useNewUrlParser: true })
+    .then((db) => {
+        console.log("Connection established with MongoDB");
+    })
+    .catch (() => {
+        console.error.bind(console, 'connection error:')
+    });
 
 //-- Schemas
 var filterSchema = mongoose.Schema({
@@ -115,7 +120,7 @@ function cleanTermToSearch(term){
 gateway.onRequestAddTorrent(function (msg, path) {
    tracker.decodeTorrent(msg)
       .then((torrent) => {
-         // console.log("Added: " + msg)
+         console.log("Added: " + msg)
          return seedbox.addTorrent(torrent, path)
       })
    }
