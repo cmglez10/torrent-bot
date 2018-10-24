@@ -9,7 +9,7 @@ Promise.config({
 var gateway = require('./lib/gateways/' + config.gateway.type)(config.gateway)
 var seedbox = require('./lib/seedboxs/' + config.seedbox.type)(config.seedbox, gateway)
 var info = require('./lib/info/' + config.info.type)(config.info)
-var trackerUtils = require('./lib/utils');
+var utils = require('./lib/utils');
 var trackers = [];
 config.trackers.forEach((trackerConfig) => {
   const trackerCode = require('./lib/trackers/' + trackerConfig.name)(trackerConfig, gateway);
@@ -75,7 +75,7 @@ function sendNewTorrents() {
         Filter.find().or([{ tracker: tracker.name }, { tracker: '*' }])
           .then(filters => {
             // console.log(JSON.stringify(filters))
-            result = applyFilters(result, filters)
+            result = utils.applyFilters(result, filters)
             // console.log("resultado filtrado:")
             // console.log(result)
             result = _.sortBy(result, ['date'])
@@ -97,44 +97,9 @@ function sendNewTorrents() {
   })
 }
 
-/*
-   Devuelve sólo aquellos registros de infoArray que pasan algún filtro de filters
- */
-function applyFilters(infoArray, filters) {
-  return _.filter(infoArray, function (info) {
-    var title = cleanTermToSearch(info.titleAll)
-    var res = false
-
-    //Miramos a ver si coincide con alguno de los filtros
-    filters.forEach((filter) => {
-      var partialres = true
-
-      //Debe coincidir con todos los términos del filtro
-      filter.terms.forEach((term) => {
-        var clenanedterm = cleanTermToSearch(term)
-        if (!_.includes(title, clenanedterm)) partialres = false
-      })
-      if (partialres) {
-        res = true
-        info.titleSearch = filter.name;
-        info.path = filter.path;
-        info.image = filter.image;
-      }
-    })
-    return res
-  })
-}
-
-function cleanTermToSearch(term) {
-  var unescapeterm = unescape(term)
-  return unescapeterm.toLowerCase()
-}
-
-
-
 gateway.onRequestAddTorrent(function (msg, path) {
-  console.log('onRequestAddTorrent: ' + msg);
-  trackerUtils.decodeTorrent(msg)
+  // console.log('onRequestAddTorrent: ' + msg);
+  utils.decodeTorrent(msg)
     .then((torrent) => {
       console.log("Added: " + msg)
       return seedbox.addTorrent(torrent, path)
