@@ -10,12 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "3.5.2",
+    "cheerio": "^1.0.0-rc.2",
     "feedparser": "2.2.9",
     "lodash": "4.17.11",
     "mongoose": "5.3.4",
     "node-telegram-bot-api": "0.30.0",
     "request": "2.88.0",
     "request-promise": "4.2.2",
-    "telegraf": "^3.24.1"
+    "telegraf": "^3.24.1",
+    "tough-cookie": "^2.4.3"
   }
 }

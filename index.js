@@ -9,12 +9,14 @@ Promise.config({
 var gateway = require('./lib/gateways/' + config.gateway.type)(config.gateway)
 var seedbox = require('./lib/seedboxs/' + config.seedbox.type)(config.seedbox, gateway)
 var info = require('./lib/info/' + config.info.type)(config.info)
+var trackerUtils = require('./lib/utils');
 var trackers = [];
 config.trackers.forEach((trackerConfig) => {
   const trackerCode = require('./lib/trackers/' + trackerConfig.name)(trackerConfig, gateway);
   trackers.push({
     name: trackerConfig.name,
-    code: trackerCode
+    code: trackerCode,
+    lastUpdate: undefined
   });
 });
 
@@ -30,7 +32,7 @@ global.types = types
 // Movidas de mongoose
 var mongoose = require('mongoose');
 global.mongoose = mongoose;
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 
 mongoose.connect('mongodb://' + config.database.user + ':' + config.database.password + '@' + config.database.uri, { useNewUrlParser: true })
   .then((db) => {
@@ -60,15 +62,14 @@ global.Filter = Filter;
 sendNewTorrents()
 setInterval(sendNewTorrents, config.refreshInterval)
 
-var lastUpdate;
 function sendNewTorrents() {
-  console.log(new Date().toISOString() + " - BUSCANDO NUEVOS TORRENTS")
+  console.log(new Date().toString() + " - BUSCANDO NUEVOS TORRENTS")
   trackers.forEach((tracker) => {
     tracker.code
       .latest()
       .then(result => {
         //filtro para quedarme sólo con los posteriores a la fecha de ultima actualización
-        result = _.filter(result, i => !(lastUpdate && i.date < lastUpdate))
+        result = _.filter(result, i => !(tracker.lastUpdate && i.date < lastUpdate))
 
         //Buscamos los filtros de hdcity para pasarlos a la función que aplica filtros
         Filter.find().or([{ tracker: tracker.name }, { tracker: '*' }])
@@ -87,7 +88,10 @@ function sendNewTorrents() {
                   return gateway.sendTorrentInfo(info)
                 })
               })
-            lastUpdate = new Date()
+              tracker.lastUpdate = new Date();
+          })
+          .catch(err => {
+            console.log("Error find: " + err);
           })
       })
   })
@@ -129,7 +133,8 @@ function cleanTermToSearch(term) {
 
 
 gateway.onRequestAddTorrent(function (msg, path) {
-  tracker.decodeTorrent(msg)
+  console.log('onRequestAddTorrent: ' + msg);
+  trackerUtils.decodeTorrent(msg)
     .then((torrent) => {
       console.log("Added: " + msg)
       return seedbox.addTorrent(torrent, path)
