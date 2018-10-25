@@ -97,12 +97,18 @@ function sendNewTorrents() {
   })
 }
 
-gateway.onRequestAddTorrent(function (msg, path) {
+gateway.onRequestAddTorrent(function (msg, _id) {
   // console.log('onRequestAddTorrent: ' + msg);
+  let filter;
+  Filter.findOne({ _id: _id})
+      .then((f) => {
+          filter = f;
+      })
+
   utils.decodeTorrent(msg)
     .then((torrent) => {
+      return seedbox.addTorrent(torrent, filter)
       console.log("Added: " + msg)
-      return seedbox.addTorrent(torrent, path)
     })
 }
 )

@@ -1,2 +1,4 @@
-<b>${info.title}</b>
-${info.description}
+<i>${info.tracker}</i>
+<b>${info.titleSearch}</b>
+<a href='${info.url}'>${info.titleAll}</a>
+
