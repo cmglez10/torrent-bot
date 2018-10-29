@@ -69,7 +69,7 @@ function sendNewTorrents() {
       .latest()
       .then(result => {
         //filtro para quedarme sólo con los posteriores a la fecha de ultima actualización
-        result = _.filter(result, i => !(tracker.lastUpdate && i.date < lastUpdate))
+        result = _.filter(result, i => !(tracker.lastUpdate && i.date < tracker.lastUpdate))
 
         //Buscamos los filtros de hdcity para pasarlos a la función que aplica filtros
         Filter.find().or([{ tracker: tracker.name }, { tracker: '*' }])
