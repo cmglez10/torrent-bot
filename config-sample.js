@@ -42,6 +42,12 @@ module.exports =
         name: 'navpreferences',
         value: '<cookie_value>'
       }]
+    }, {
+      name: 'iptorrents',
+      url: '<tracker rss url>'
+    }, {
+      name: 'hdspace',
+      url: '<tracker rss url>'
     }],
     gateway: {
       type: 'telegram',
